@@ -4,7 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 
 import { SubjectRoutes } from "./subjectRoutes/subjectRoutes";
 import "../methods/methods";
-import Menu from "./Menu"
+import Menu from "./subComponents/Menu"
 
 class AddNote extends React.Component{
   constructor(props){

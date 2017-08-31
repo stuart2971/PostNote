@@ -2,8 +2,7 @@ import { Meteor } from "meteor/meteor"
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 
-import { SubjectRoutes } from "./subjectRoutes/subjectRoutes";
-import AddNote from "./AddNote";
+import { SubjectRoutes } from "../subjectRoutes/subjectRoutes";
 
 class Menu extends React.Component{
   render(){

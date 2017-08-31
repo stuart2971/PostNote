@@ -22,7 +22,7 @@ class Signup extends React.Component{
 
     Accounts.createUser({ email, password }, (err) => {
       if(err){
-        console.log(err)
+        this.setState({ message: err.reason })
       }else{
         console.log("Success");
         this.props.history.push("/");
@@ -43,6 +43,7 @@ class Signup extends React.Component{
           <button>Signup</button>
           <br />
           <Link to="/login">I already have an account</Link>
+          <br />
         </form>
       </div>
     )

@@ -4,6 +4,12 @@ import { withRouter, Link } from "react-router-dom";
 
 
 class Login extends React.Component{
+  constructor(props){
+  	super(props);
+  	this.state = {
+      message: ""
+    };
+  }
   componentWillMount() {
     if(Meteor.userId()){
       this.props.history.replace("/")
@@ -16,7 +22,7 @@ class Login extends React.Component{
 
     Meteor.loginWithPassword(email, password, (err) => {
       if(err){
-        console.log(err.reason)
+        this.setState({ message: err.reason })
       }else{
         this.props.history.replace("/")
       }
@@ -27,6 +33,7 @@ class Login extends React.Component{
       <div className="center-v-outer center">
         <form className="center-v-inner" onSubmit={this.loginUser.bind(this)}>
           <h1>Login</h1>
+          {this.state.message}
           <input type="email" ref="email" placeholder="Email"/>
           <br />
           <input type="password" ref="password" placeholder="Password"/>
@@ -34,6 +41,7 @@ class Login extends React.Component{
           <button>Login</button>
           <br />
           <Link to="/signup">I need an account</Link>
+          <br />
         </form>
       </div>
     )

@@ -2,7 +2,7 @@ import React from "react";
 import { Tracker } from "meteor/tracker";
 import { Link, withRouter } from "react-router-dom"
 
-import { Notes } from "./../methods/methods";
+import { Notes } from "./../../methods/methods";
 
 class RenderNotesByUserId extends React.Component{
   constructor(props){
@@ -21,6 +21,8 @@ class RenderNotesByUserId extends React.Component{
           </div>
           <div className="right inline">
             <span>Subject: <strong>{note.subject}</strong></span>
+            <br />
+            <span>⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
           </div>
         </div>
       )
@@ -30,7 +32,7 @@ class RenderNotesByUserId extends React.Component{
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ userId : this.props.filter }).fetch();
-      this.setState({ notes })
+      this.setState({ notes });
     });
   }
   componentWillUnmount() {

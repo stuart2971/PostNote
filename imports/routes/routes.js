@@ -5,7 +5,7 @@ import { Tracker } from "meteor/tracker";
 
 import Login from "../ui/authentication/Login";
 import Signup from "../ui/authentication/Signup";
-import Home from "../ui/Home";
+import Foo from "../ui/Home";
 import searchNotes from "../ui/searchNotes"
 import Note from "../ui/Note";
 import fullSize from "../ui/fullSize"
@@ -17,22 +17,21 @@ import NotFound from "../ui/NotFound";
 export default class Routes extends React.Component{
   render(){
     return (
-      <div>
         <BrowserRouter>
           <Switch>
-            <Login path="/login" />
-            <Signup path="/signup" />
-            <Route path="/" component={Home} exact/>
+            <Route path="/login" component={Login}/>
+            <Route path="/signup"component={Signup} />
+            <Route path="/" component={Foo} exact/>
             <Route path={`/searchNotes/:subject`} component={Note} />
             <Route path={`/searchNotes`} component={searchNotes} />
             <Route path={`/fullSize/:noteId`} component={fullSize}/>
-            <AddNote path="/addNote"/>
+            <Route path="/addNote" component={AddNote}/>
             <Route path="/questions" component={questions} />
             <Route component={userProfile} path={`/users/:userId`} />
-            <NotFound />
+            <Route component={NotFound} />
           </Switch>
         </BrowserRouter>
-      </div>
     )
   }
 }
+// export default withRouter(Routes)

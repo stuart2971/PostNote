@@ -2,7 +2,7 @@ import React from "react";
 import { Tracker } from "meteor/tracker";
 import { Link, withRouter } from "react-router-dom"
 
-import { Notes } from "./../methods/methods";
+import { Notes } from "./../../methods/methods";
 
  class RenderNotesBySubject extends React.Component{
   constructor(props){
@@ -21,6 +21,8 @@ import { Notes } from "./../methods/methods";
           </div>
           <div className="right inline">
             <span>Subject: <strong>{note.subject}</strong></span>
+            <br />
+            <span>⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
           </div>
         </div>
       )

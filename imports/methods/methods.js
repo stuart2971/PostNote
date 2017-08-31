@@ -16,6 +16,9 @@ if(Meteor.isServer){
   Meteor.publish("user", function(){
     return Meteor.user()
   })
+  Meteor.publish('notes-newest', function () {
+    return Notes.find().sort({$natural: -1}).limit(10);
+  });
 }
 
 Meteor.methods({

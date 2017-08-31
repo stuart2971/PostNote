@@ -2,8 +2,8 @@ import { Meteor } from "meteor/meteor"
 import React from "react";
 import { withRouter, Switch, BrowserRouter, Route, Redirect, Link } from "react-router-dom";
 
-import RenderNotesBySubject from "./renderNotesBySubject";
-import Menu from "./Menu"
+import RenderNotesBySubject from "./subComponents/renderNotesBySubject";
+import Menu from "./subComponents/Menu"
 import { SubjectRoutes } from "./subjectRoutes/subjectRoutes"
 
 class Notes extends React.Component{

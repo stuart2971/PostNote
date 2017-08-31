@@ -4,7 +4,7 @@ import { Tracker } from "meteor/tracker";
 import { Link } from "react-router-dom";
 import { Accounts } from "meteor/accounts-base"
 
-import Menu from "./Menu"
+import Menu from "./subComponents/Menu"
 import { Notes } from "../methods/methods";
 import "../methods/methods"
 
@@ -25,15 +25,26 @@ export default class fullSize extends React.Component{
       if(doc == null ){
         return;
       };
-      const user = Meteor.user().emails[0].address;
-      if(doc.likes.includes(user)){
-        document.getElementById("like").style.color = "#379956"
-      }
-      if(doc.dislikes.includes(user)){
-        document.getElementById("dislike").style.color = "#E20049"
-      }
+      this.checkIfReacted(doc)
       this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length })
     })
+  }
+  checkIfReacted(doc){
+    const user = Meteor.user().emails[0].address;
+    let reactButtons = document.getElementsByClassName("react");
+    const changeAllButtons = () => {
+      for(let i = 0; i<reactButtons.length; i++){
+        reactButtons[i].disabled = true;
+      }
+    }
+    if(doc.likes.includes(user)){
+      document.getElementById("like").style.color = "#379956";
+      changeAllButtons()
+    }
+    if(doc.dislikes.includes(user)){
+      document.getElementById("dislike").style.color = "#E20049";
+      changeAllButtons()
+    }
   }
   componentWillReceiveProps(nextProps) {
     if(this.props.match.params.noteId != nextProps.match.params.noteId)
@@ -51,13 +62,13 @@ export default class fullSize extends React.Component{
         <div className="left">
           <img className="fullSize-image" src={doc.imageURL} />
           <p className="center react-data">
-            <span id="like" className="react" onClick={() => {
+            <button id="like" className="react" onClick={() => {
               Meteor.call("like", doc._id, Meteor.user().emails[0].address);
-            }}>⬆</span>
+            }}>⬆</button>
             {this.state.likes}
-            <span id="dislike" className="react" onClick={() => {
+            <button id="dislike" className="react" onClick={() => {
               Meteor.call("dislike", doc._id, Meteor.user().emails[0].address);
-            }}>⬇</span>
+            }}>⬇</button>
             {this.state.dislikes}
           </p>
         </div>

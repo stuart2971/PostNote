@@ -26,7 +26,7 @@ class searchNotes extends React.Component{
           </select>
           <button>Find Notes!</button>
           <br />
-          <Link to="/">Go Back</Link>
+          <Link to="/">← Go Back</Link>
         </form>
       </div>
     )

@@ -3,8 +3,8 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Tracker } from "meteor/tracker";
 
-import Menu from "./Menu";
-import RenderNotesByUserId from "./renderNotesByUserId"
+import Menu from "./subComponents/Menu";
+import RenderNotesByUserId from "./subComponents/renderNotesByUserId"
 
 class userProfile extends React.Component{
   constructor(props){
