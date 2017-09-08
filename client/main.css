@@ -137,6 +137,30 @@ a:hover{
   cursor:pointer;
 }
 .react-data{
-  font-size: 2em;
   user-select: none;
+  font-size: 2.4em;
+}
+.hover-delete{
+  font-size:2.6em;
+}
+.hover-delete:hover .delete{
+  display: inline-block;
+  right:5%;
+}
+.slide-left{
+  font-size: 1.6em;
+}
+.delete{
+  display: none;
+  cursor: pointer;
+  font-size: 1.4em;
+  background: #D45D79;
+  width: auto;
+}
+.not-profile{
+  display: none;
+}
+#addLink{
+  font-size: 1.4em;
+  cursor: pointer;
 }

@@ -25,7 +25,7 @@ export default class Routes extends React.Component{
             <Route path={`/searchNotes/:subject`} component={Note} />
             <Route path={`/searchNotes`} component={searchNotes} />
             <Route path={`/fullSize/:noteId`} component={fullSize}/>
-            <Route path="/addNote" component={AddNote}/>
+            <Route path="/AddNote" component={AddNote}/>
             <Route path="/questions" component={questions} />
             <Route component={userProfile} path={`/users/:userId`} />
             <Route component={NotFound} />

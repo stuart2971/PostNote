@@ -7,29 +7,33 @@ import SimpleSchema from "simpl-schema";
 export const Notes = new Mongo.Collection("notes");
 
 if(Meteor.isServer){
+  //Limited to only 100!!!! remember to fix!!!
   Meteor.publish('notes', function () {
-    return Notes.find()
+    return Notes.find({},{ limit: 100, fields: { key1: 1, key2: 1 }});
   });
   Meteor.publish('users', function () {
     return Meteor.users.find()
   });
-  Meteor.publish("user", function(){
-    return Meteor.user()
-  })
+  // Meteor.publish("user", function(){
+  //   return Meteor.user()
+  // })
   Meteor.publish('notes-newest', function () {
-    return Notes.find().sort({$natural: -1}).limit(10);
+    return Notes.find({}, {sort: {createdAt: -1}, limit: 10});
   });
 }
 
 Meteor.methods({
   "notes.insert"(noteInfo){
-    const URLSchema = new SimpleSchema({
-      imageURL:{
-          type:String,
-          label:"Your image URL",
-          regEx: SimpleSchema.RegEx.Url
-      }
-    }).validate({ imageURL:noteInfo.imageURL })
+    noteInfo.imageURL.map((url) => {
+      const URLSchema = new SimpleSchema({
+        imageURL:{
+            type:String,
+            label:"Your image URL",
+            regEx: SimpleSchema.RegEx.Url
+        }
+      }).validate({ imageURL:url })
+    })
+
     Notes.insert({
       title: noteInfo.title,
       subject: noteInfo.subject,
@@ -38,9 +42,10 @@ Meteor.methods({
       userId: noteInfo.userId,
       userEmail: noteInfo.userEmail,
       likes: [],
-      dislikes: []
+      dislikes: [],
+      createdAt: noteInfo.createdAt
     })
-    console.log("Note Inserted", )
+    console.log("Note Inserted", noteInfo)
   },
   "like"(noteId, userEmail){
     const notes = Notes.findOne( noteId ).likes;
@@ -72,5 +77,8 @@ Meteor.methods({
      throw new Meteor.Error(400, "You already Disliked this note")
    }
    return notes.length
-  }
+ },
+ "notes.remove"(id){
+    Notes.remove(id)
+ }
 })

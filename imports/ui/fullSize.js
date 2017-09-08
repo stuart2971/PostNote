@@ -26,8 +26,18 @@ export default class fullSize extends React.Component{
         return;
       };
       this.checkIfReacted(doc)
-      this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length })
+      this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length });
+      this.checkIfUserCreated(doc);
     })
+
+  }
+  checkIfUserCreated(doc){
+    console.log(doc);
+    if(Meteor.userId() == doc.userId){
+      document.getElementById("delete_button").className = "delete"
+    }else{
+      document.getElementById("delete_button").className = "not-profile"
+    }
   }
   checkIfReacted(doc){
     const user = Meteor.user().emails[0].address;
@@ -39,7 +49,7 @@ export default class fullSize extends React.Component{
     }
     if(doc.likes.includes(user)){
       document.getElementById("like").style.color = "#379956";
-      changeAllButtons()
+      changeAllButtons();
     }
     if(doc.dislikes.includes(user)){
       document.getElementById("dislike").style.color = "#E20049";
@@ -56,11 +66,20 @@ export default class fullSize extends React.Component{
         this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length });
       })
   }
+  renderImages(){
+    let images = this.state.doc.imageURL;
+    if(images == null || images == undefined){
+      return;
+    }
+    return images.map((image) => {
+      return <img src={image} />
+    })
+  }
   renderNote(doc){
     return(
       <div className="fullSize-container">
         <div className="left">
-          <img className="fullSize-image" src={doc.imageURL} />
+          {this.renderImages()}
           <p className="center react-data">
             <button id="like" className="react" onClick={() => {
               Meteor.call("like", doc._id, Meteor.user().emails[0].address);
@@ -73,7 +92,15 @@ export default class fullSize extends React.Component{
           </p>
         </div>
         <div className="right">
-          <h2>{doc.title}</h2>
+          <div className="hover-delete">
+            <span className="slide-left">{doc.title}</span>
+            <div id="delete_button" onClick={() => {
+              Meteor.call("notes.remove", doc._id, (err, res) => {
+                if(!err){this.props.history.push("/")}
+              });
+            }}>🗑️</div>
+          </div>
+          <br />
           <Link to={`/users/${doc.userId}`}>{doc.userEmail}</Link>
           <br />
           <span className="description">{doc.description}</span>
