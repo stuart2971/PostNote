@@ -5,7 +5,7 @@ import { Tracker } from "meteor/tracker";
 
 import Login from "../ui/authentication/Login";
 import Signup from "../ui/authentication/Signup";
-import Foo from "../ui/Home";
+import Home from "../ui/Home";
 import searchNotes from "../ui/searchNotes"
 import Note from "../ui/Note";
 import fullSize from "../ui/fullSize"
@@ -21,7 +21,7 @@ export default class Routes extends React.Component{
           <Switch>
             <Route path="/login" component={Login}/>
             <Route path="/signup"component={Signup} />
-            <Route path="/" component={Foo} exact/>
+            <Route path="/" component={Home} exact/>
             <Route path={`/searchNotes/:subject`} component={Note} />
             <Route path={`/searchNotes`} component={searchNotes} />
             <Route path={`/fullSize/:noteId`} component={fullSize}/>
