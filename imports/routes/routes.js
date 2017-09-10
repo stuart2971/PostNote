@@ -10,7 +10,7 @@ import searchNotes from "../ui/searchNotes"
 import Note from "../ui/Note";
 import fullSize from "../ui/fullSize"
 import userProfile from "../ui/userProfile";
-import AddNote from "../ui/addNote";
+import AddNote from "../ui/AddNote";
 import questions from "../ui/questions"
 import NotFound from "../ui/NotFound";
 
