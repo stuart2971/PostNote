@@ -4,15 +4,15 @@ import { Link, withRouter } from "react-router-dom"
 
 import { Notes } from "./../../methods/methods";
 
-class RenderNotesByUserId extends React.Component{
+ class RenderNotesByUnit extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
-      notes: [],
-      message: ""
+      notes: []
     };
   }
   renderNotes(notes){
+    console.log(this.props.unit)
     return notes.map((note) => {
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
@@ -32,19 +32,20 @@ class RenderNotesByUserId extends React.Component{
   componentDidMount() {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({ userId : this.props.filter }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length === 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
+      //regex: contains the string, doesn't have to be exact.  options: i is for non-case-sensitive
+      const notes = Notes.find({ unit : {$regex: this.props.unit, $options: 'i'}, subject: this.props.subject }, {sort: {createdAt: -1}}).fetch();
+      if(notes.length == 0){
+        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
       }
-      this.setState({ notes });
+      this.setState({ notes })
     });
   }
   componentWillReceiveProps(nextProps) {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({ subject : nextProps.filter }, {sort: {createdAt: -1}}).fetch();
+      const notes = Notes.find({ unit : {$regex: nextProps.unit, $options: 'i'}, subject: nextProps.subject }, {sort: {createdAt: -1}}).fetch();
       if(notes.length == 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
+        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
       }
       this.setState({ notes })
     });
@@ -56,9 +57,8 @@ class RenderNotesByUserId extends React.Component{
     return(
       <div className="center">
         {this.renderNotes(this.state.notes)}
-        {this.state.message}
       </div>
     )
   }
 }
-export default withRouter(RenderNotesByUserId)
+export default withRouter(RenderNotesByUnit);

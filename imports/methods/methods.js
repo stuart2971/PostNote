@@ -15,9 +15,9 @@ if(Meteor.isServer){
   Meteor.publish('users', function () {
     return Meteor.users.find()
   });
-  Meteor.publish("user", function(){
-    return Meteor.user()
-  })
+  // Meteor.publish("user", function(){
+  //   return Meteor.user()
+  // })
   Meteor.publish('notes-newest', function () {
     return Notes.find({}, {sort: {createdAt: -1}, limit: 10});
   });
@@ -42,6 +42,7 @@ Meteor.methods({
       imageURL: noteInfo.imageURL,
       userId: noteInfo.userId,
       userEmail: noteInfo.userEmail,
+      unit: noteInfo.unit,
       likes: [],
       dislikes: [],
       createdAt: noteInfo.createdAt

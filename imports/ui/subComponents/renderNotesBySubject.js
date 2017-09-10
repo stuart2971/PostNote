@@ -8,7 +8,8 @@ import { Notes } from "./../../methods/methods";
   constructor(props){
   	super(props);
   	this.state = {
-      notes: []
+      notes: [],
+      message: ""
     };
   }
   renderNotes(notes){
@@ -20,7 +21,7 @@ import { Notes } from "./../../methods/methods";
             <span>{note.title}</span>
           </div>
           <div className="right inline">
-            <span>Subject: <strong>{note.subject}</strong></span>
+            <span>Subject: <strong>{note.subject}, {note.unit}</strong></span>
             <br />
             <span>⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
           </div>
@@ -28,10 +29,23 @@ import { Notes } from "./../../methods/methods";
       )
     })
   }
-  componentWillMount() {
+  componentDidMount() {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({ subject : this.props.filter }).fetch();
+      const notes = Notes.find({ subject : this.props.filter }, {sort: {createdAt: -1}}).fetch();
+      if(notes.length == 0){
+        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
+      }
+      this.setState({ notes });
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    this.tracker = Tracker.autorun(() => {
+      Meteor.subscribe('notes');
+      const notes = Notes.find({ subject : nextProps.filter }, {sort: {createdAt: -1}}).fetch();
+      if(notes.length == 0){
+        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
+      }
       this.setState({ notes })
     });
   }
@@ -42,6 +56,7 @@ import { Notes } from "./../../methods/methods";
     return(
       <div className="center">
         {this.renderNotes(this.state.notes)}
+        {this.state.message}
       </div>
     )
   }

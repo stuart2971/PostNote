@@ -27,8 +27,11 @@ class userProfile extends React.Component{
       if(user == null || user == undefined){
         return;
       }
-      console.log(user)
-      this.setState({email: user.emails[0].address})
+      if(Meteor.userId() == this.props.match.params.userId){
+        this.setState({ email: "My Profile"})
+      }else{
+        this.setState({email: user.emails[0].address})
+      }
     });
   }
   componentWillReceiveProps(nextProps) {
@@ -37,7 +40,11 @@ class userProfile extends React.Component{
       if(user == null || user == undefined){
         return;
       }
-      this.setState({email: user.emails[0].address})
+      if(Meteor.userId() == this.props.match.params.userId){
+        this.setState({ email: "My Profile"})
+      }else{
+        this.setState({email: user.emails[0].address})
+      }
     });
   }
   render(){

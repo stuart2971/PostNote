@@ -34,6 +34,8 @@ class AddNote extends React.Component{
     let userId = Meteor.userId();
     let userEmail = Meteor.user().emails[0].address;
     let createdAt = Date.parse(new Date());
+    let unit = this.refs.unit.value;
+    console.log(unit)
     if(!Meteor.userId()){
       this.setState({
         message: "You need to login before you can add a note",
@@ -41,8 +43,8 @@ class AddNote extends React.Component{
       })
       throw new Meteor.Error(400, "User is not signed in.")
     }
-    if(title && subject && description && imageURL){
-      let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt }
+    if(title && subject && description && imageURL && unit){
+      let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit }
       Meteor.call("notes.insert", noteInfo, (err, res) => {
         if(err){
           this.setState({message: err.reason});
@@ -69,7 +71,7 @@ class AddNote extends React.Component{
         var urls = this.state.urls.concat([this.refs.imageURL.value]);
         this.setState({ urls });
       }else{
-        throw new Meteor.Error(400, "Only allowed 10 images per upload.  ")
+        this.setState({ message: "Only allowed 10 notes per upload.  "})
       }
     }
   }
@@ -120,13 +122,14 @@ class AddNote extends React.Component{
             <span>({this.state.urls.length})</span>
           </p>
           <input type="file" onChange={this.readImage} id="fileInput" /><br />
-          <img id="preview" src="" height="200" alt="Image preview..." /><br />
           <br />
           <Link to="/questions">What is this?</Link>
           <br />
+          <input placeholder="Subject Unit" type="text" ref="unit"/>
+          <br />
           <button>Add Note</button>
           <br />
-          {this.state.message}
+          <div className="alert alert-danger">Error: {this.state.message}</div>
           <br />
           {this.state.loginMessage}
         </form>

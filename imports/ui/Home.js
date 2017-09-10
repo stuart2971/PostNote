@@ -14,7 +14,8 @@ export default class Home extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
-      notes: []
+      notes: [],
+      message: ""
     };
   }
   componentDidMount() {
@@ -23,6 +24,9 @@ export default class Home extends React.Component{
       const notes = Notes.find({},{sort: {createdAt: -1}, limit: 10}).fetch();
       if(notes == null || notes == undefined){
         return;
+      }
+      if(notes.length == 0){
+        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
       }
       this.setState({ notes });
     })
@@ -36,7 +40,7 @@ export default class Home extends React.Component{
             <span>{note.title}</span>
           </div>
           <div className="right inline">
-            <span>Subject: <strong>{note.subject}</strong></span>
+            <span>Subject: <strong>{note.subject}, {note.unit}</strong></span>
             <br />
             <span>⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
           </div>
@@ -50,6 +54,7 @@ export default class Home extends React.Component{
         <Menu />
         <h1>★ Newest Notes ★</h1>
         {this.renderNewNotes(this.state.notes)}
+        {this.state.message}
         <br />
         <Link to="/searchNotes">Find more Notes ➜ </Link>
       </div>
