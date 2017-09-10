@@ -10,7 +10,7 @@ import searchNotes from "../ui/searchNotes"
 import Note from "../ui/Note";
 import fullSize from "../ui/fullSize"
 import userProfile from "../ui/userProfile";
-import AddNote from "../ui/AddNote";
+import addNote from "../ui/addNote";
 import questions from "../ui/questions"
 import NotFound from "../ui/NotFound";
 
@@ -25,7 +25,7 @@ export default class Routes extends React.Component{
             <Route path={`/searchNotes/:subject`} component={Note} />
             <Route path={`/searchNotes`} component={searchNotes} />
             <Route path={`/fullSize/:noteId`} component={fullSize}/>
-            <Route path="/AddNote" component={AddNote}/>
+            <Route path="/addNote" component={addNote}/>
             <Route path="/questions" component={questions} />
             <Route component={userProfile} path={`/users/:userId`} />
             <Route component={NotFound} />

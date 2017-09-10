@@ -28,7 +28,7 @@ class RenderNotesByUserId extends React.Component{
       )
     })
   }
-  componentWillMount() {
+  componentDidMount() {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ userId : this.props.filter }).fetch();

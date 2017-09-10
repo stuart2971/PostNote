@@ -19,19 +19,24 @@ class userProfile extends React.Component{
       this.props.history.push("/login");
     });
   }
-  componentWillMount() {
-    Meteor.subscribe('user');
-    Meteor.subscribe('users');
-  }
   componentDidMount() {
-    this.tracker = Tracker.autorun(() => {
-      const user = Meteor.users.findOne(this.props.match.params.userId)
+    Tracker.autorun(() => {
+      Meteor.subscribe('user');
+      Meteor.subscribe('users');
+      const user = Meteor.users.findOne(this.props.match.params.userId);
+      if(user == null || user == undefined){
+        return;
+      }
+      console.log(user)
       this.setState({email: user.emails[0].address})
     });
   }
   componentWillReceiveProps(nextProps) {
-    this.tracker = Tracker.autorun(() => {
-      const user = Meteor.users.findOne(nextProps.match.params.userId)
+    Tracker.autorun(() => {
+      const user = Meteor.users.findOne(nextProps.match.params.userId);
+      if(user == null || user == undefined){
+        return;
+      }
       this.setState({email: user.emails[0].address})
     });
   }

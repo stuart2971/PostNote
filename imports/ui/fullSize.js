@@ -18,11 +18,11 @@ export default class fullSize extends React.Component{
     };
   }
   componentDidMount() {
-    Meteor.subscribe("notes");
-    Meteor.subscribe("user");
     this.tracker = Tracker.autorun(() => {
+      Meteor.subscribe("notes");
+      Meteor.subscribe("user");
       let doc = Notes.findOne(this.props.match.params.noteId);
-      if(doc == null ){
+      if(doc == null || doc == undefined){
         return;
       };
       this.checkIfReacted(doc)
@@ -32,7 +32,6 @@ export default class fullSize extends React.Component{
 
   }
   checkIfUserCreated(doc){
-    console.log(doc);
     if(Meteor.userId() == doc.userId){
       document.getElementById("delete_button").className = "delete"
     }else{
@@ -40,12 +39,19 @@ export default class fullSize extends React.Component{
     }
   }
   checkIfReacted(doc){
+    if(doc == null || doc == undefined){
+      return;
+    }
+    console.log(doc)
     const user = Meteor.user().emails[0].address;
     let reactButtons = document.getElementsByClassName("react");
     const changeAllButtons = () => {
       for(let i = 0; i<reactButtons.length; i++){
         reactButtons[i].disabled = true;
       }
+    }
+    if(user == null || user == undefined){
+      return;
     }
     if(doc.likes.includes(user)){
       document.getElementById("like").style.color = "#379956";
@@ -60,7 +66,7 @@ export default class fullSize extends React.Component{
     if(this.props.match.params.noteId != nextProps.match.params.noteId)
       this.tracker = Tracker.autorun(() => {
         const doc = Notes.findOne(nextProps.match.params.noteId);
-        if(doc == null ){
+        if(doc == null || doc == undefined){
           return;
         }
         this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length });

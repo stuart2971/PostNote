@@ -34,7 +34,6 @@ class AddNote extends React.Component{
     let userId = Meteor.userId();
     let userEmail = Meteor.user().emails[0].address;
     let createdAt = Date.parse(new Date());
-
     if(!Meteor.userId()){
       this.setState({
         message: "You need to login before you can add a note",
@@ -52,20 +51,26 @@ class AddNote extends React.Component{
           this.props.history.push("/")
         }
       })
+    }else {
+      this.setState({message: "You must fill in all the blanks.  "})
     }
   }
   addLink(){
     if(this.refs.imageURL.value){
-      const URLSchema = new SimpleSchema({
-        imageURL:{
-            type:String,
-            label:"Your image URL",
-            regEx: SimpleSchema.RegEx.Url
-        }
-      }).validate({ imageURL:this.refs.imageURL.value })
+      if(this.state.urls.length < 10){
+        const URLSchema = new SimpleSchema({
+          imageURL:{
+              type:String,
+              label:"Your image URL",
+              regEx: SimpleSchema.RegEx.Url
+          }
+        }).validate({ imageURL:this.refs.imageURL.value })
 
-      var urls = this.state.urls.concat([this.refs.imageURL.value]);
-      this.setState({ urls });
+        var urls = this.state.urls.concat([this.refs.imageURL.value]);
+        this.setState({ urls });
+      }else{
+        throw new Meteor.Error(400, "Only allowed 10 images per upload.  ")
+      }
     }
   }
   readImage(){

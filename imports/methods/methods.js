@@ -9,14 +9,15 @@ export const Notes = new Mongo.Collection("notes");
 if(Meteor.isServer){
   //Limited to only 100!!!! remember to fix!!!
   Meteor.publish('notes', function () {
-    return Notes.find({},{ limit: 100, fields: { key1: 1, key2: 1 }});
+    // return Notes.find({},{ limit: 100, fields: { key1: 1, key2: 1 }});
+    return Notes.find()
   });
   Meteor.publish('users', function () {
     return Meteor.users.find()
   });
-  // Meteor.publish("user", function(){
-  //   return Meteor.user()
-  // })
+  Meteor.publish("user", function(){
+    return Meteor.user()
+  })
   Meteor.publish('notes-newest', function () {
     return Notes.find({}, {sort: {createdAt: -1}, limit: 10});
   });
