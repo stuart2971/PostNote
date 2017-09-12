@@ -34,9 +34,6 @@ import { Notes } from "./../../methods/methods";
       Meteor.subscribe('notes');
       //regex: contains the string, doesn't have to be exact.  options: i is for non-case-sensitive
       const notes = Notes.find({ unit : {$regex: this.props.unit, $options: 'i'}, subject: this.props.subject }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length == 0){
-        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
       this.setState({ notes })
     });
   }
@@ -44,9 +41,6 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ unit : {$regex: nextProps.unit, $options: 'i'}, subject: nextProps.subject }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length == 0){
-        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
       this.setState({ notes })
     });
   }

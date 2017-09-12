@@ -33,9 +33,6 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ subject : this.props.filter }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length == 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
       this.setState({ notes });
     });
   }
@@ -43,9 +40,6 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ subject : nextProps.filter }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length == 0){
-        this.setState({ notes: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
       this.setState({ notes })
     });
   }

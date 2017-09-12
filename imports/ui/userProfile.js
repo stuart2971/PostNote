@@ -24,6 +24,7 @@ class userProfile extends React.Component{
       Meteor.subscribe('user');
       Meteor.subscribe('users');
       const user = Meteor.users.findOne(this.props.match.params.userId);
+      console.log(user)
       if(user == null || user == undefined){
         return;
       }

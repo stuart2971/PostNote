@@ -3,11 +3,10 @@ import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { Tracker } from "meteor/tracker";
 import { Accounts } from "meteor/accounts-base";
-import { createContainer } from "meteor/react-meteor-data"
+import { createContainer } from "meteor/react-meteor-data";
 
 import { Notes } from "../methods/methods";
 import SubjectRoutes from "./subjectRoutes/subjectRoutes";
-import RenderNotesBySubject from "./subComponents/renderNotesBySubject";
 import Menu from "./subComponents/Menu.js";
 
 export default class Home extends React.Component{
@@ -24,9 +23,6 @@ export default class Home extends React.Component{
       const notes = Notes.find({},{sort: {createdAt: -1}, limit: 10}).fetch();
       if(notes == null || notes == undefined){
         return;
-      }
-      if(notes.length == 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
       }
       this.setState({ notes });
     })

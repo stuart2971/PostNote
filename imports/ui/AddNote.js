@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor"
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import SimpleSchema from "simpl-schema";
+import axios from "axios"
 
 import { SubjectRoutes } from "./subjectRoutes/subjectRoutes";
 import "../methods/methods";
@@ -13,7 +14,8 @@ class AddNote extends React.Component{
   	this.state = {
       message: "",
       loginMessage: (<div></div>),
-      urls: []
+      urls: [],
+      cloudinaryUrls: []
     };
   }
   renderSubjects(subjects){
@@ -75,20 +77,31 @@ class AddNote extends React.Component{
       }
     }
   }
-  readImage(){
-    let preview = document.getElementById("preview");
-    let file = document.getElementById("fileInput").files[0];
-    let reader = new FileReader();
+  readImage(e){
+    let file = e.target.files[0];
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/djomgi4gv/upload";
+    const CLOUDIARY_UPLOAD_PRESET = "dkw66w2k"
+    let formData = new FormData();
+    let cloudinaryURLS = [];
 
-    console.log(`fileVar: ${file}, previewVar: ${preview}`);
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDIARY_UPLOAD_PRESET)
 
-    reader.addEventListener("load", function () {
-      preview.src = reader.result;
-    }, false);
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    axios({
+      url: CLOUDINARY_URL,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      data: formData
+    }).then(function(res){
+      console.log(res)
+      cloudinaryURLS.push(res.data.secure_url);
+      console.log(cloudinaryURLS);
+    }).catch(function(err){
+      console.log(err);
+    })
+    console.log(file);
   }
   render(){
     return(
@@ -101,7 +114,7 @@ class AddNote extends React.Component{
           <h1>Add a note</h1>
           <label htmlFor="title">Note Title</label>
           <br />
-          <input id="title" ref="title" type="text" placeholder="Title" />
+          <input className="addNote-input" id="title" ref="title" type="text" placeholder="Title" />
           <br />
           <span>What subject is your note?</span>
           <br />
@@ -112,7 +125,7 @@ class AddNote extends React.Component{
           <br />
           <label htmlFor="description">Add a description: </label>
           <br />
-          <input id="description" ref="description" placeholder="Description Here..."/>
+          <input className="addNote-input" id="description" ref="description" placeholder="Description Here..."/>
           <br />
           <label htmlFor="imageURl">Image Url: </label>
           <br />
@@ -121,11 +134,13 @@ class AddNote extends React.Component{
             <span onClick={this.addLink.bind(this)} id="addLink">+</span>
             <span>({this.state.urls.length})</span>
           </p>
-          <input type="file" onChange={this.readImage} id="fileInput" /><br />
+
+          <input className="addNote-input" type="file" onChange={this.readImage} id="fileInput" /><br />
+          <img src="https://res.cloudinary.com/djomgi4gv/image/upload/v1505257026/gpxr86jdkv2f6yzewpzi.jpg"/>
           <br />
           <Link to="/questions">What is this?</Link>
           <br />
-          <input placeholder="Subject Unit" type="text" ref="unit"/>
+          <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit"/>
           <br />
           <button>Add Note</button>
           <br />

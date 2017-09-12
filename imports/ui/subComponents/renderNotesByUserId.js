@@ -8,11 +8,14 @@ class RenderNotesByUserId extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
-      notes: [],
-      message: ""
+      notes: []
     };
   }
   renderNotes(notes){
+    //return empty, then renders notes, then something empties it again...Not sure what is....
+    if(notes == null || notes == undefined){
+      return;
+    }
     return notes.map((note) => {
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
@@ -30,33 +33,23 @@ class RenderNotesByUserId extends React.Component{
     })
   }
   componentDidMount() {
-    this.tracker = Tracker.autorun(() => {
+    Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ userId : this.props.filter }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length === 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
-      this.setState({ notes });
-    });
-  }
-  componentWillReceiveProps(nextProps) {
-    this.tracker = Tracker.autorun(() => {
-      Meteor.subscribe('notes');
-      const notes = Notes.find({ subject : nextProps.filter }, {sort: {createdAt: -1}}).fetch();
-      if(notes.length == 0){
-        this.setState({ message: <p>There are no notes.  Click <Link to="/addNote"> here </Link>to make one.  </p> })
-      }
       this.setState({ notes })
     });
   }
-  componentWillUnmount() {
-    this.tracker.stop()
+  componentWillReceiveProps(nextProps) {
+    Tracker.autorun(() => {
+      Meteor.subscribe('notes');
+      const notes = Notes.find({ userId : nextProps.filter }, {sort: {createdAt: -1}}).fetch()
+      this.setState({ notes })
+    });
   }
   render(){
     return(
       <div className="center">
         {this.renderNotes(this.state.notes)}
-        {this.state.message}
       </div>
     )
   }
