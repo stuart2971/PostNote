@@ -51,8 +51,21 @@ class AddNote extends React.Component{
         this.setState({ message: "You need to enter an image." })
         return;
       }
-      console.log(imageURL.length, file)
-      if(imageURL){
+      if(imageURL.length > 0 && file){
+        let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
+
+        this.uploadToCloudinary(file, (err, res) => {
+          imageURL.push(res.data.secure_url);
+          Meteor.call("notes.insert", noteInfo, (err, res) => {
+            if(err){
+              this.setState({message: err.reason});
+              console.log(err);
+            }else{
+              this.props.history.push("/");
+            }
+          })
+        });
+      }else if(imageURL.length > 0){
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         Meteor.call("notes.insert", noteInfo, (err, res) => {
@@ -62,8 +75,7 @@ class AddNote extends React.Component{
             this.props.history.push("/")
           }
         })
-      }
-      if(file){
+      }else if(file){
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.uploadToCloudinary(file, (err, res) => {
