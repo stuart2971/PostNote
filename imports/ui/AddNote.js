@@ -14,8 +14,7 @@ class AddNote extends React.Component{
   	this.state = {
       message: "",
       loginMessage: (<div></div>),
-      urls: [],
-      cloudinaryUrls: []
+      urls: []
     };
   }
   renderSubjects(subjects){
@@ -37,7 +36,8 @@ class AddNote extends React.Component{
     let userEmail = Meteor.user().emails[0].address;
     let createdAt = Date.parse(new Date());
     let unit = this.refs.unit.value;
-    console.log(unit)
+    let file = this.refs.fileInput.files[0];
+
     if(!Meteor.userId()){
       this.setState({
         message: "You need to login before you can add a note",
@@ -45,44 +45,74 @@ class AddNote extends React.Component{
       })
       throw new Meteor.Error(400, "User is not signed in.")
     }
-    if(title && subject && description && imageURL && unit){
-      let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit }
-      Meteor.call("notes.insert", noteInfo, (err, res) => {
-        if(err){
-          this.setState({message: err.reason});
-          console.log(err)
-        }else{
-          this.props.history.push("/")
-        }
-      })
-    }else {
-      this.setState({message: "You must fill in all the blanks.  "})
-    }
-  }
-  addLink(){
-    if(this.refs.imageURL.value){
-      if(this.state.urls.length < 10){
-        const URLSchema = new SimpleSchema({
-          imageURL:{
-              type:String,
-              label:"Your image URL",
-              regEx: SimpleSchema.RegEx.Url
-          }
-        }).validate({ imageURL:this.refs.imageURL.value })
 
-        var urls = this.state.urls.concat([this.refs.imageURL.value]);
-        this.setState({ urls });
-      }else{
-        this.setState({ message: "Only allowed 10 notes per upload.  "})
+    if(title && subject && description && unit){
+      if(imageURL.length == 0 && file == undefined){
+        this.setState({ message: "You need to enter an image." })
+        return;
+      }
+      console.log(imageURL.length, file)
+      if(imageURL){
+        let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
+
+        Meteor.call("notes.insert", noteInfo, (err, res) => {
+          if(err){
+            this.setState({ message: "Please enter a valid image URL." });
+          }else{
+            this.props.history.push("/")
+          }
+        })
+      }
+      if(file){
+        let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
+
+        this.uploadToCloudinary(file, (err, res) => {
+          imageURL.push(res.data.secure_url);
+          console.log("Outside")
+          Meteor.call("notes.insert", noteInfo, (err, res) => {
+            //problem .......inserting 2 docs, one empty and one with proper data
+            console.log("Inside")
+            if(err){
+              this.setState({message: err.reason});
+              console.log(err);
+            }else{
+              this.props.history.push("/")
+            }
+          })
+        });
       }
     }
   }
-  readImage(e){
-    let file = e.target.files[0];
+  addLink(){
+    let file = this.refs.fileInput.files[0];
+    if(this.refs.imageURL.value || file != undefined){
+      if(this.state.urls.length < 10){
+        if(!this.state.urls.includes(this.refs.imageURL.value)){
+          const URLSchema = new SimpleSchema({
+            imageURL:{
+                type:String,
+                label:"Your image URL",
+                regEx: SimpleSchema.RegEx.Url
+            }
+          }).validate({ imageURL:this.refs.imageURL.value })
+
+          let urls = this.state.urls.concat([this.refs.imageURL.value]);
+          this.setState({ urls });
+          this.refs.imageURL.value == "";
+        }else{
+          this.setState({ message: "You already inserted this note." })
+        }
+      }else{
+        this.setState({ message: "Only allowed 10 notes per upload.  "})
+      }
+    }else{
+      this.setState({ message: "Please enter a note." })
+    }
+  }
+  uploadToCloudinary(file, callback){
     const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/djomgi4gv/upload";
     const CLOUDIARY_UPLOAD_PRESET = "dkw66w2k"
     let formData = new FormData();
-    let cloudinaryURLS = [];
 
     formData.append("file", file);
     formData.append("upload_preset", CLOUDIARY_UPLOAD_PRESET)
@@ -95,9 +125,7 @@ class AddNote extends React.Component{
       },
       data: formData
     }).then(function(res){
-      console.log(res)
-      cloudinaryURLS.push(res.data.secure_url);
-      console.log(cloudinaryURLS);
+      callback(new Meteor.Error(400, "Error, cannot connect to cloudinary."), res);
     }).catch(function(err){
       console.log(err);
     })
@@ -112,35 +140,32 @@ class AddNote extends React.Component{
           others cannot as well.  Please make sure your notes are clear and
           easy to read.*</p>
           <h1>Add a note</h1>
-          <label htmlFor="title">Note Title</label>
           <br />
-          <input className="addNote-input" id="title" ref="title" type="text" placeholder="Title" />
-          <br />
-          <span>What subject is your note?</span>
+          <input className="addNote-input" id="title" ref="title" type="text" placeholder="Title" autoComplete="off" />
           <br />
           <select ref="subject">
             <option selected disabled value="">Choose a subject</option>
             {this.renderSubjects(SubjectRoutes)}
           </select>
           <br />
-          <label htmlFor="description">Add a description: </label>
+          <input className="addNote-input" id="description" ref="description" placeholder="Description Here..." autoComplete="off" />
           <br />
-          <input className="addNote-input" id="description" ref="description" placeholder="Description Here..."/>
-          <br />
-          <label htmlFor="imageURl">Image Url: </label>
-          <br />
-          <p className="inline">
-            <input id="imageUrl" ref="imageURL" placeholder="Enter image URL here"/>
-            <span onClick={this.addLink.bind(this)} id="addLink">+</span>
-            <span>({this.state.urls.length})</span>
-          </p>
+          <Link to="/questions">What is this?</Link><br />
+          <div className="inline full">
+            <div className="left">
+              <input id="imageUrl" className="addNote-input insert-link" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
+            </div>
+            or
+            <div className="right">
+              <input className="addNote-input inline" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
+            </div>
+            <div className="full inline-block">
+              <span onClick={this.addLink.bind(this)} id="addLink">+</span>
+              <span>({this.state.urls.length})</span>
+            </div>
+          </div>
 
-          <input className="addNote-input" type="file" onChange={this.readImage} id="fileInput" /><br />
-          <img src="https://res.cloudinary.com/djomgi4gv/image/upload/v1505257026/gpxr86jdkv2f6yzewpzi.jpg"/>
-          <br />
-          <Link to="/questions">What is this?</Link>
-          <br />
-          <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit"/>
+          <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit" autocomplete="off" />
           <br />
           <button>Add Note</button>
           <br />
