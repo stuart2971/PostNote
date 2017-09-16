@@ -76,7 +76,7 @@ class AddNote extends React.Component{
               this.setState({message: err.reason});
               console.log(err);
             }else{
-              this.props.history.push("/")
+              this.props.history.push("/");
             }
           })
         });
