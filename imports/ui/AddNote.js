@@ -71,7 +71,7 @@ class AddNote extends React.Component{
           console.log("Outside")
           Meteor.call("notes.insert", noteInfo, (err, res) => {
             //problem .......inserting 2 docs, one empty and one with proper data
-            console.log("Inside")
+            console.log("Inside");
             if(err){
               this.setState({message: err.reason});
               console.log(err);
