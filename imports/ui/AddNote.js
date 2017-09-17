@@ -56,13 +56,14 @@ class AddNote extends React.Component{
       if(imageURL.length > 0 && file){
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
+        this.state.cloudinaryFiles.map((file) => {
+          this.uploadToCloudinary(file, (err, res) => {
+            let urls = imageURL.push( res.data.secure_url );
+          })
+        })
+
         this.uploadToCloudinary(file, (err, res) => {
           imageURL.push(res.data.secure_url);
-          this.state.cloudinaryFiles.map((file) => {
-            this.uploadToCloudinary(file, (err, res) => {
-              let urls = imageURL.push( res.data.secure_url );
-            })
-          })
           Meteor.call("notes.insert", noteInfo, (err, res) => {
             if(err){
               this.setState({message: err.reason});
@@ -136,10 +137,12 @@ class AddNote extends React.Component{
     console.log("cliked")
     if(file != undefined){
       if(this.state.cloudinaryFiles.length < 10){
-        let cloudinaryFiles = this.state.cloudinaryFiles.concat([ file ]);
-        this.setState({ cloudinaryFiles });
-        console.log(this.state.cloudinaryFiles);
-      }
+        if(!this.state.cloudinaryFiles.includes(file)){
+          let cloudinaryFiles = this.state.cloudinaryFiles.concat([ file ]);
+          this.setState({ cloudinaryFiles });
+          console.log(this.state.cloudinaryFiles);
+        }
+      }else{this.setState({message: "Too many notes.  "})}
     }
   }
   uploadToCloudinary(file, callback){
