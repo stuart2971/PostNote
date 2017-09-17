@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor"
 import React from "react";
 import { Tracker } from "meteor/tracker";
 import { Link } from "react-router-dom";
-import { Accounts } from "meteor/accounts-base"
+import { Accounts } from "meteor/accounts-base";'meteor/accounts-base';
 
 import Menu from "./subComponents/Menu"
 import { Notes } from "../methods/methods";
@@ -81,6 +81,9 @@ export default class fullSize extends React.Component{
       return <img src={image} />
     })
   }
+  deleteImage(publicId){
+    Meteor.call("cloudinary.remove", publicId)
+  }
   renderNote(doc){
     return(
       <div className="fullSize-container">
@@ -101,6 +104,7 @@ export default class fullSize extends React.Component{
           <div className="hover-delete">
             <span className="slide-left">{doc.title}</span>
             <div id="delete_button" onClick={() => {
+              this.deleteImage(doc.cloudinaryData.data.public_id, doc.cloudinaryData.data.resource_type)
               Meteor.call("notes.remove", doc._id, (err, res) => {
                 if(!err){this.props.history.push("/")}
               });

@@ -3,6 +3,8 @@ import { Accounts } from "meteor/accounts-base";
 import { withRouter, Redirect } from "react-router-dom";
 import { Mongo } from "meteor/mongo";
 import SimpleSchema from "simpl-schema";
+import cloudinary from "cloudinary";
+
 
 export const Notes = new Mongo.Collection("notes");
 
@@ -45,7 +47,8 @@ Meteor.methods({
       unit: noteInfo.unit,
       likes: [],
       dislikes: [],
-      createdAt: noteInfo.createdAt
+      createdAt: noteInfo.createdAt,
+      cloudinaryData: noteInfo.cloudinaryData
     })
     console.log("Note Inserted", noteInfo)
   },
@@ -82,5 +85,10 @@ Meteor.methods({
  },
  "notes.remove"(id){
     Notes.remove(id)
+ },
+ "cloudinary.delete"(publicId){
+   cloudinary.v2.uploader.destroy(public_id, function(error, result) {
+      console.log(result);
+    });
  }
 })

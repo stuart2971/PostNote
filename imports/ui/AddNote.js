@@ -14,7 +14,8 @@ class AddNote extends React.Component{
   	this.state = {
       message: "",
       loginMessage: (<div></div>),
-      urls: []
+      urls: [],
+      cloudinaryFiles: []
     };
   }
   renderSubjects(subjects){
@@ -51,11 +52,17 @@ class AddNote extends React.Component{
         this.setState({ message: "You need to enter an image." })
         return;
       }
+
       if(imageURL.length > 0 && file){
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.uploadToCloudinary(file, (err, res) => {
           imageURL.push(res.data.secure_url);
+          this.state.cloudinaryFiles.map((file) => {
+            this.uploadToCloudinary(file, (err, res) => {
+              let urls = imageURL.push( res.data.secure_url );
+            })
+          })
           Meteor.call("notes.insert", noteInfo, (err, res) => {
             if(err){
               this.setState({message: err.reason});
@@ -78,12 +85,16 @@ class AddNote extends React.Component{
       }else if(file){
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
+        this.state.cloudinaryFiles.map((file) => {
+          this.uploadToCloudinary(file, (err, res) => {
+            let urls = imageURL.push( res.data.secure_url );
+          })
+        })
+
         this.uploadToCloudinary(file, (err, res) => {
           imageURL.push(res.data.secure_url);
-          console.log("Outside")
+          noteInfo.cloudinaryData = res;
           Meteor.call("notes.insert", noteInfo, (err, res) => {
-            //problem .......inserting 2 docs, one empty and one with proper data
-            console.log("Inside");
             if(err){
               this.setState({message: err.reason});
               console.log(err);
@@ -96,8 +107,7 @@ class AddNote extends React.Component{
     }
   }
   addLink(){
-    let file = this.refs.fileInput.files[0];
-    if(this.refs.imageURL.value || file != undefined){
+    if(this.refs.imageURL.value){
       if(this.state.urls.length < 10){
         if(!this.state.urls.includes(this.refs.imageURL.value)){
           const URLSchema = new SimpleSchema({
@@ -119,6 +129,17 @@ class AddNote extends React.Component{
       }
     }else{
       this.setState({ message: "Please enter a note." })
+    }
+  }
+  addCloudinaryLink(){
+    let file = this.refs.fileInput.files[0];
+    console.log("cliked")
+    if(file != undefined){
+      if(this.state.cloudinaryFiles.length < 10){
+        let cloudinaryFiles = this.state.cloudinaryFiles.concat([ file ]);
+        this.setState({ cloudinaryFiles });
+        console.log(this.state.cloudinaryFiles);
+      }
     }
   }
   uploadToCloudinary(file, callback){
@@ -166,14 +187,18 @@ class AddNote extends React.Component{
           <div className="inline full">
             <div className="left">
               <input id="imageUrl" className="addNote-input insert-link" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
+              <div className="full inline-block">
+                <span onClick={this.addLink.bind(this)} id="addLink">+</span>
+                <span>({this.state.urls.length})</span>
+              </div>
             </div>
             or
             <div className="right">
               <input className="addNote-input inline" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
-            </div>
-            <div className="full inline-block">
-              <span onClick={this.addLink.bind(this)} id="addLink">+</span>
-              <span>({this.state.urls.length})</span>
+              <div className="full inline-block">
+                <span onClick={this.addCloudinaryLink.bind(this)} id="addLink">+</span>
+                <span>({this.state.cloudinaryFiles.length})</span>
+              </div>
             </div>
           </div>
 
