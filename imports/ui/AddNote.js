@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor"
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import SimpleSchema from "simpl-schema";
 import axios from "axios"
 
@@ -23,7 +23,7 @@ class AddNote extends React.Component{
       return <option key={item}>{item}</option>
     })
   }
-  componentWillMount() {
+  componentDidMount() {
     Meteor.subscribe('user');
   }
   addNote(e){
@@ -141,6 +141,7 @@ class AddNote extends React.Component{
           let cloudinaryFiles = this.state.cloudinaryFiles.concat([ file ]);
           this.setState({ cloudinaryFiles });
           console.log(this.state.cloudinaryFiles);
+        //can not filter duplicates with .includes since the file creates a lastModifiedDate element that changes.
         }
       }else{this.setState({message: "Too many notes.  "})}
     }
@@ -168,6 +169,9 @@ class AddNote extends React.Component{
     console.log(file);
   }
   render(){
+    if(!Meteor.userId()){
+      return <Redirect to="/login" />
+    }
     return(
       <div>
         <form onSubmit={this.addNote.bind(this)}>

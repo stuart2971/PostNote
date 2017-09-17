@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { Tracker } from "meteor/tracker";
 
 import Menu from "./subComponents/Menu";
@@ -49,6 +49,9 @@ class userProfile extends React.Component{
     });
   }
   render(){
+    if(!Meteor.userId()){
+      return <Redirect to="/login" />
+    }
     return(
       <div className="center">
         <Menu />

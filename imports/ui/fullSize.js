@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor"
 import React from "react";
 import { Tracker } from "meteor/tracker";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Accounts } from "meteor/accounts-base";'meteor/accounts-base';
 
 import Menu from "./subComponents/Menu"
@@ -85,6 +85,9 @@ export default class fullSize extends React.Component{
     Meteor.call("cloudinary.remove", publicId)
   }
   renderNote(doc){
+    if(!Meteor.userId()){
+      return <Redirect to="/login" />
+    }
     return(
       <div className="fullSize-container">
         <div className="left">

@@ -17,8 +17,8 @@ import { Notes } from "./../../methods/methods";
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
           <div className="left inline">
-            <p><strong>{note.userEmail}</strong></p>
-            <span>{note.title}</span>
+            <p><strong>{note.title}</strong></p>
+            <span>{note.userEmail}</span>
           </div>
           <div className="right inline">
             <span>Subject: <strong>{note.subject}, {note.unit}</strong></span>
@@ -40,7 +40,7 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       const notes = Notes.find({ subject : nextProps.filter }, {sort: {createdAt: -1}}).fetch();
-      this.setState({ notes })
+      this.setState({ notes });
     });
   }
   componentWillUnmount() {
