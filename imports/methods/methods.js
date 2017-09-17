@@ -9,19 +9,25 @@ import cloudinary from "cloudinary";
 export const Notes = new Mongo.Collection("notes");
 
 if(Meteor.isServer){
-  //Limited to only 100!!!! remember to fix!!!
   Meteor.publish('notes', function () {
-    // return Notes.find({},{ limit: 100, fields: { key1: 1, key2: 1 }});
     return Notes.find()
   });
   Meteor.publish('users', function () {
     return Meteor.users.find()
   });
-  // Meteor.publish("user", function(){
-  //   return Meteor.user()
-  // })
   Meteor.publish('notes-newest', function () {
     return Notes.find({}, {sort: {createdAt: -1}, limit: 10});
+  });
+
+  Meteor.methods({
+    "cloudinary.remove"(public_id){
+      cloudinary.config({
+        cloud_name: "djomgi4gv",
+        api_key: "978536488113234",
+        api_secret: "hd6-RkQK2MDEK1ovSgZEwLifTqY"
+      })
+      cloudinary.uploader.destroy(public_id, function(error, result){console.log(result)});
+    }
   });
 }
 
@@ -85,10 +91,5 @@ Meteor.methods({
  },
  "notes.remove"(id){
     Notes.remove(id)
- },
- "cloudinary.delete"(publicId){
-   cloudinary.v2.uploader.destroy(public_id, function(error, result) {
-      console.log(result);
-    });
  }
 })

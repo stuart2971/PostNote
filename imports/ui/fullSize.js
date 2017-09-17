@@ -3,6 +3,7 @@ import React from "react";
 import { Tracker } from "meteor/tracker";
 import { Link, Redirect } from "react-router-dom";
 import { Accounts } from "meteor/accounts-base";'meteor/accounts-base';
+import cloudinary from "cloudinary"
 
 import Menu from "./subComponents/Menu"
 import { Notes } from "../methods/methods";
@@ -72,13 +73,15 @@ export default class fullSize extends React.Component{
         this.setState({ doc, likes: doc.likes.length, dislikes: doc.dislikes.length });
       })
   }
-  renderImages(){
+  renderImages(doc){
     let images = this.state.doc.imageURL;
     if(images == null || images == undefined){
       return;
     }
     return images.map((image) => {
-      return <img src={image} />
+      return <img src={image} onClick={() => {
+        window.location.href = doc.cloudinaryData.data.secure_url
+      }}/>
     })
   }
   deleteImage(publicId){
@@ -91,7 +94,7 @@ export default class fullSize extends React.Component{
     return(
       <div className="fullSize-container">
         <div className="left">
-          {this.renderImages()}
+          {this.renderImages(doc)}
           <p className="center react-data">
             <button id="like" className="react" onClick={() => {
               Meteor.call("like", doc._id, Meteor.user().emails[0].address);
@@ -107,7 +110,9 @@ export default class fullSize extends React.Component{
           <div className="hover-delete">
             <span className="slide-left">{doc.title}</span>
             <div id="delete_button" onClick={() => {
-              this.deleteImage(doc.cloudinaryData.data.public_id, doc.cloudinaryData.data.resource_type)
+              if(doc.cloudinaryData != null){
+                this.deleteImage(doc.cloudinaryData.data.public_id)
+              }
               Meteor.call("notes.remove", doc._id, (err, res) => {
                 if(!err){this.props.history.push("/")}
               });
