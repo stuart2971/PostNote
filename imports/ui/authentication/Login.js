@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor";
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 
+import "../../../client/stylesheets/authentication.css"
 
 class Login extends React.Component{
   constructor(props){
@@ -12,7 +13,7 @@ class Login extends React.Component{
   }
   componentWillMount() {
     if(Meteor.userId()){
-      this.props.history.replace("/")
+      this.props.history.replace("/");
     }
   }
   loginUser(e){
@@ -26,21 +27,22 @@ class Login extends React.Component{
       }else{
         this.props.history.replace("/")
       }
-    })
+    });
   }
   render(){
     return (
-      <div className="center-v-outer center">
+      <div className="center-v-outer center login-container">
         <form className="center-v-inner" onSubmit={this.loginUser.bind(this)}>
           <h1>Login</h1>
           {this.state.message}
-          <input type="email" ref="email" placeholder="Email"/>
           <br />
-          <input type="password" ref="password" placeholder="Password"/>
+          <input className="login-userData" type="email" ref="email" placeholder="Email"/>
           <br />
-          <button>Login</button>
+          <input className="login-userData" type="password" ref="password" placeholder="Password"/>
           <br />
-          <Link to="/signup">I need an account</Link>
+          <button className="login-button">Login</button>
+          <br />
+          <Link to="/signup" className="authentication-link">I need an account</Link>
           <br />
         </form>
       </div>

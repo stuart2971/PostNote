@@ -3,6 +3,8 @@ import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { Accounts } from "meteor/accounts-base"
 
+import "../../../client/stylesheets/authentication.css"
+
 class Signup extends React.Component{
   constructor(props){
   	super(props);
@@ -31,16 +33,16 @@ class Signup extends React.Component{
   }
   render(){
     return (
-      <div className="center center-v-outer">
+      <div className="center center-v-outer login-container">
         <form className="center-v-inner" onSubmit={this.signupUser.bind(this)}>
           <h1>Signup</h1>
           {this.state.message}
           <br />
-          <input type="email" ref="email" placeholder="Email"/>
+          <input className="login-userData" type="email" ref="email" placeholder="Email"/>
           <br />
-          <input type="password" ref="password" placeholder="Password"/>
+          <input className="login-userData" type="password" ref="password" placeholder="Password"/>
           <br />
-          <button>Signup</button>
+          <button className="login-button signup-button">Signup</button>
           <br />
           <Link to="/login">I already have an account</Link>
           <br />

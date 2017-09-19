@@ -80,7 +80,7 @@ export default class fullSize extends React.Component{
     }
     return images.map((image) => {
       return <img src={image} onClick={() => {
-        window.location.href = doc.cloudinaryData.data.secure_url
+        window.location.href = image || doc.cloudinaryData.data.secure_url
       }}/>
     })
   }

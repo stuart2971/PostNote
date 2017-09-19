@@ -21,12 +21,12 @@ class RenderNotesByUserId extends React.Component{
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
           <div className="left inline">
             <p><strong>{note.title}</strong></p>
-            <span>{note.userEmail}</span>
+            <span className="removeOnSmallDevice">{note.userEmail}</span>
           </div>
           <div className="right inline">
             <span>Subject: <strong>{note.subject}, {note.unit}</strong></span>
             <br />
-            <span>⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
+            <span className="removeOnSmallDevice">⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
           </div>
         </div>
       )

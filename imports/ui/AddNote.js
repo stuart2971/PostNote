@@ -188,7 +188,7 @@ class AddNote extends React.Component{
             {this.renderSubjects(SubjectRoutes)}
           </select>
           <br />
-          <input className="addNote-input" id="description" ref="description" placeholder="Description Here..." autoComplete="off" />
+          <textarea className="addNote-input" id="description" ref="description" placeholder="Description Here..." autoComplete="off" />
           <br />
           <Link to="/questions">What is this?</Link><br />
           <div className="inline full">
@@ -222,4 +222,4 @@ class AddNote extends React.Component{
   }
 }
 
-export default withRouter(AddNote);
+export default withRouter(AddNote)

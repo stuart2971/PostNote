@@ -1,0 +1,58 @@
+.login-container{
+  color: black;
+  width: 20%;
+  border-radius: 5px;
+  position: relative;
+  top:13vh;
+}
+.login-button{
+  background:#FB5660;
+  border: none;
+  color:white;
+  outline:none;
+  width: 13%;
+  height:5vh;
+  font-size: 1.2em;
+  transition: 0.1s ease;
+  border-radius: 5px;
+}
+.login-button:hover{
+  background:#EB4A5F;
+}
+.login-userData{
+  width: 30%;
+  height:5vh;
+  border: 0.5px solid #C0C5CD;
+  color:black;
+  outline:none;
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  margin: 2vh;
+  border-radius:5px;
+  padding-left: 10px;
+}
+a{
+  color:white;
+}
+*::selection {
+   background: #fff2a8;
+}
+.border-left{
+  border:none;
+  border-left: 4px black;
+}
+@media only screen and (max-width: 600px) {
+  .login-userData{
+    width: 80%;
+  }
+  .login-button{
+    width: 33%;
+    height:4vh;
+    font-size: 0.9em;
+  }
+}
+.signup-button{
+  background:#5250ff;
+}
+.signup-button:hover{
+  background: #4746ff
+}
