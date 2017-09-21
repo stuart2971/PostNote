@@ -13,21 +13,21 @@ export default class Home extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
-      notes: [],
-      message: ""
+      notes: []
     };
   }
   componentDidMount() {
-    Meteor.subscribe('notes-newest')
     this.tracker = Tracker.autorun(() => {
+      Meteor.subscribe('notes-newest')
       const notes = Notes.find({},{sort: {createdAt: -1}, limit: 10}).fetch();
-      if(notes == null || notes == undefined){
-        return;
-      }
+      console.log(notes)
       this.setState({ notes });
     })
   }
   renderNewNotes(notes){
+    if(notes == null || notes == undefined){
+      return;
+    }
     return notes.map((note) => {
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
@@ -50,9 +50,9 @@ export default class Home extends React.Component{
         <Menu />
         <h1>★ Newest Notes ★</h1>
         {this.renderNewNotes(this.state.notes)}
-        {this.state.message}
         <br />
         <Link to="/searchNotes">Find more Notes ➜ </Link>
+        <button>Load More Notes</button>
       </div>
     )
   }

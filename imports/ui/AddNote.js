@@ -54,6 +54,7 @@ class AddNote extends React.Component{
       }
 
       if(imageURL.length > 0 && file){
+        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.state.cloudinaryFiles.map((file) => {
@@ -74,6 +75,7 @@ class AddNote extends React.Component{
           })
         });
       }else if(imageURL.length > 0){
+        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         Meteor.call("notes.insert", noteInfo, (err, res) => {
@@ -84,6 +86,7 @@ class AddNote extends React.Component{
           }
         })
       }else if(file){
+        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.state.cloudinaryFiles.map((file) => {
@@ -211,7 +214,7 @@ class AddNote extends React.Component{
 
           <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit" autocomplete="off" />
           <br />
-          <button>Add Note</button>
+          <button ref="addNoteButton">Add Note</button>
           <br />
           <div className="alert alert-danger">Error: {this.state.message}</div>
           <br />
