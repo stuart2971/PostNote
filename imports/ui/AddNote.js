@@ -49,12 +49,11 @@ class AddNote extends React.Component{
 
     if(title && subject && description && unit){
       if(imageURL.length == 0 && file == undefined){
-        this.setState({ message: "You need to enter an image." })
+        this.setState({ message: "You need to enter an image." });
         return;
       }
 
       if(imageURL.length > 0 && file){
-        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.state.cloudinaryFiles.map((file) => {
@@ -75,7 +74,6 @@ class AddNote extends React.Component{
           })
         });
       }else if(imageURL.length > 0){
-        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         Meteor.call("notes.insert", noteInfo, (err, res) => {
@@ -86,7 +84,6 @@ class AddNote extends React.Component{
           }
         })
       }else if(file){
-        this.refs.addNoteButton.disabled = true;
         let noteInfo = { title, subject, description, imageURL, userId, userEmail, createdAt, unit };
 
         this.state.cloudinaryFiles.map((file) => {
@@ -171,6 +168,13 @@ class AddNote extends React.Component{
     })
     console.log(file);
   }
+  checkIfError(){
+    if(this.state.message){
+      return <div id="errorMessage" className="alert alert-danger">Error: {this.state.message}</div>
+    }else{
+      return <div></div>
+    }
+  }
   render(){
     if(!Meteor.userId()){
       return <Redirect to="/login" />
@@ -183,9 +187,7 @@ class AddNote extends React.Component{
           others cannot as well.  Please make sure your notes are clear and
           easy to read.*</p>
           <h1>Add a note</h1>
-          <br />
           <input className="addNote-input" id="title" ref="title" type="text" placeholder="Title" autoComplete="off" />
-          <br />
           <select ref="subject">
             <option selected disabled value="">Choose a subject</option>
             {this.renderSubjects(SubjectRoutes)}
@@ -194,29 +196,18 @@ class AddNote extends React.Component{
           <textarea className="addNote-input" id="description" ref="description" placeholder="Description Here..." autoComplete="off" />
           <br />
           <Link to="/questions">What is this?</Link><br />
-          <div className="inline full">
-            <div className="left">
-              <input id="imageUrl" className="addNote-input insert-link" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
-              <div className="full inline-block">
-                <span onClick={this.addLink.bind(this)} id="addLink">+</span>
-                <span>({this.state.urls.length})</span>
-              </div>
-            </div>
-            or
-            <div className="right">
-              <input className="addNote-input inline" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
-              <div className="full inline-block">
-                <span onClick={this.addCloudinaryLink.bind(this)} id="addLink">+</span>
-                <span>({this.state.cloudinaryFiles.length})</span>
-              </div>
-            </div>
-          </div>
-
+          <input id="imageUrl noBorder" className="addNote-input insert-link" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
+          <span onClick={this.addLink.bind(this)} id="addLink">+</span>
+          <span>({this.state.urls.length})</span>
+          <input className="addNote-input noBorder" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
+          <span onClick={this.addCloudinaryLink.bind(this)} id="addLink">+</span>
+          <span>({this.state.cloudinaryFiles.length})</span>
           <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit" autocomplete="off" />
           <br />
           <button ref="addNoteButton">Add Note</button>
           <br />
-          <div className="alert alert-danger">Error: {this.state.message}</div>
+          {this.checkIfError()}
+
           <br />
           {this.state.loginMessage}
         </form>

@@ -5,6 +5,7 @@ import { Tracker } from "meteor/tracker";
 
 import Menu from "./subComponents/Menu";
 import RenderNotesByUserId from "./subComponents/renderNotesByUserId"
+import "../../client/stylesheets/userProfile.css"
 
 class userProfile extends React.Component{
   constructor(props){
@@ -53,10 +54,12 @@ class userProfile extends React.Component{
       return <Redirect to="/login" />
     }
     return(
-      <div className="center">
-        <Menu />
-        <button onClick={this.logoutUser.bind(this)}>Logout</button>
-        <h1>{this.state.email}</h1>
+      <div className="container-profile">
+        <div className="center">
+          <Menu />
+        </div>
+        <h1 className="header-profile">{this.state.email}</h1>
+        <button className="logout-button" onClick={this.logoutUser.bind(this)}>Logout</button>
         <RenderNotesByUserId filter={this.props.match.params.userId}/>
       </div>
     )

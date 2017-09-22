@@ -34,9 +34,9 @@ export default class fullSize extends React.Component{
   }
   checkIfUserCreated(doc){
     if(Meteor.userId() == doc.userId){
-      document.getElementById("delete_button").className = "delete"
+      document.getElementById("delete_button").className = "visible"
     }else{
-      document.getElementById("delete_button").className = "not-profile"
+      document.getElementById("delete_button").className = "invisible"
     }
   }
   checkIfReacted(doc){
@@ -84,9 +84,6 @@ export default class fullSize extends React.Component{
       }}/>
     })
   }
-  deleteImage(publicId){
-    Meteor.call("cloudinary.remove", publicId)
-  }
   renderNote(doc){
     if(!Meteor.userId()){
       return <Redirect to="/login" />
@@ -108,20 +105,22 @@ export default class fullSize extends React.Component{
         </div>
         <div className="right">
           <div className="hover-delete">
-            <span className="slide-left">{doc.title}</span>
-            <div id="delete_button" onClick={() => {
-              if(doc.cloudinaryData != null){
-                this.deleteImage(doc.cloudinaryData.data.public_id)
-              }
-              Meteor.call("notes.remove", doc._id, (err, res) => {
-                if(!err){this.props.history.push("/")}
-              });
-            }}>🗑️</div>
+            <span>{doc.title}</span>
           </div>
           <br />
           <Link to={`/users/${doc.userId}`}>{doc.userEmail}</Link>
           <br />
           <span className="description">{doc.description}</span>
+          <br />
+          <button id="delete_button" onClick={(e) => {
+            e.preventDefault();
+            if(doc.cloudinaryData != null){
+              Meteor.call("cloudinary.remove", doc.cloudinaryData.data.public_id)
+            }
+            Meteor.call("notes.remove", doc._id, (err, res) => {
+              if(!err){this.props.history.push("/");}
+            });
+          }}>Delete</button>
         </div>
       </div>
     )
