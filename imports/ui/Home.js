@@ -52,7 +52,6 @@ export default class Home extends React.Component{
         {this.renderNewNotes(this.state.notes)}
         <br />
         <Link to="/searchNotes">Find more Notes ➜ </Link>
-        <button>Load More Notes</button>
       </div>
     )
   }

@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom"
 
 import { Notes } from "./../../methods/methods";
 
- class RenderNotesByUnit extends React.Component{
+ class RenderNotesByLike extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
@@ -12,7 +12,6 @@ import { Notes } from "./../../methods/methods";
     };
   }
   renderNotes(notes){
-    console.log(this.props.unit)
     return notes.map((note) => {
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
@@ -32,16 +31,15 @@ import { Notes } from "./../../methods/methods";
   componentDidMount() {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      //regex: contains the string, doesn't have to be exact.  options: i is for incase-sensitive
-      const notes = Notes.find({ unit : {$regex: this.props.unit, $options: 'i'}, subject: this.props.subject }, {sort: {createdAt: -1}}).fetch();
+      const notes = Notes.find({subject: this.props.subject}, {sort: {likes: -1}}).fetch();
       this.setState({ notes })
     });
   }
   componentWillReceiveProps(nextProps) {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({ unit : {$regex: nextProps.unit, $options: 'i'}, subject: nextProps.subject }, {sort: {createdAt: -1}}).fetch();
-      this.setState({ notes })
+      const notes = Notes.find({subject: nextProps.subject}, {sort: {likes: -1}}).fetch();
+      this.setState({ notes });
     });
   }
   componentWillUnmount() {
@@ -55,4 +53,4 @@ import { Notes } from "./../../methods/methods";
     )
   }
 }
-export default withRouter(RenderNotesByUnit);
+export default withRouter(RenderNotesByLike);

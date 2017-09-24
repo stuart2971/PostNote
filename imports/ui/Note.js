@@ -6,6 +6,7 @@ import RenderNotesBySubject from "./subComponents/renderNotesBySubject";
 import RenderNotesByUnit from "./subComponents/renderNotesByUnit"
 import Menu from "./subComponents/Menu"
 import { SubjectRoutes } from "./subjectRoutes/subjectRoutes"
+import FilterNotesMenu from "./subComponents/filterNotesMenu"
 
 class Notes extends React.Component{
   constructor(props){
@@ -21,26 +22,12 @@ class Notes extends React.Component{
       return <h2>Subject not found...:(</h2>
     }
   }
-  componentDidMount() {
-    if(!this.refs.unitSearch.value){
-      this.setState({notes: <RenderNotesBySubject filter={this.props.match.params.subject}/>})
-    }
-  }
-  searchByUnit(){
-    let search = this.refs.unitSearch.value;
-    if(search){
-      this.setState({ notes: <RenderNotesByUnit subject={this.props.match.params.subject} unit={search} />})
-    }else{
-      this.setState({notes: <RenderNotesBySubject filter={this.props.match.params.subject} /> })
-    }
-  }
-
   render(){
     return (
       <div className="center">
         <Menu />
         {this.checkIfSubject()}
-        <input type="text" placeholder="Search by unit" ref="unitSearch" onChange={this.searchByUnit.bind(this)}/>
+        <FilterNotesMenu subject={this.props.match.params.subject}/>
         {this.state.notes}
       </div>
     )

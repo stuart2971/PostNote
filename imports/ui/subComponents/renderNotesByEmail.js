@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom"
 
 import { Notes } from "./../../methods/methods";
 
- class RenderNotesByUnit extends React.Component{
+ class RenderNotesByEmail extends React.Component{
   constructor(props){
   	super(props);
   	this.state = {
@@ -33,14 +33,14 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       //regex: contains the string, doesn't have to be exact.  options: i is for incase-sensitive
-      const notes = Notes.find({ unit : {$regex: this.props.unit, $options: 'i'}, subject: this.props.subject }, {sort: {createdAt: -1}}).fetch();
+      const notes = Notes.find({ userEmail : {$regex: this.props.email, $options: 'i'}, subject: this.props.subject }, {sort: {createdAt: -1}}).fetch();
       this.setState({ notes })
     });
   }
   componentWillReceiveProps(nextProps) {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({ unit : {$regex: nextProps.unit, $options: 'i'}, subject: nextProps.subject }, {sort: {createdAt: -1}}).fetch();
+      const notes = Notes.find({ userEmail : {$regex: nextProps.email, $options: 'i'}, subject: nextProps.subject }, {sort: {createdAt: -1}}).fetch();
       this.setState({ notes })
     });
   }
@@ -55,4 +55,4 @@ import { Notes } from "./../../methods/methods";
     )
   }
 }
-export default withRouter(RenderNotesByUnit);
+export default withRouter(RenderNotesByEmail);

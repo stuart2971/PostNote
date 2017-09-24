@@ -3,3 +3,11 @@
   margin-left: 0px;
   margin-top:2px;
 }
+.selectSubject{
+  padding: 7px;
+  margin-bottom: 20px;
+}
+.eightyPercent{
+  width: 80%;
+  display: inline-block;
+}

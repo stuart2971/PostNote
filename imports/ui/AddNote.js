@@ -47,7 +47,7 @@ class AddNote extends React.Component{
       throw new Meteor.Error(400, "User is not signed in.")
     }
 
-    if(title && subject && description && unit){
+    if(title && subject && unit){
       if(imageURL.length == 0 && file == undefined){
         this.setState({ message: "You need to enter an image." });
         return;
@@ -126,7 +126,7 @@ class AddNote extends React.Component{
           this.setState({ message: "You already inserted this note." })
         }
       }else{
-        this.setState({ message: "Only allowed 10 notes per upload.  "})
+        this.setState({ message: "Only allowed 10 notes per upload.  " })
       }
     }else{
       this.setState({ message: "Please enter a note." })
@@ -188,7 +188,7 @@ class AddNote extends React.Component{
           easy to read.*</p>
           <h1>Add a note</h1>
           <input className="addNote-input" id="title" ref="title" type="text" placeholder="Title" autoComplete="off" />
-          <select ref="subject">
+          <select ref="subject" className="selectSubject">
             <option selected disabled value="">Choose a subject</option>
             {this.renderSubjects(SubjectRoutes)}
           </select>
@@ -196,12 +196,16 @@ class AddNote extends React.Component{
           <textarea className="addNote-input" id="description" ref="description" placeholder="Description Here..." autoComplete="off" />
           <br />
           <Link to="/questions">What is this?</Link><br />
-          <input id="imageUrl noBorder" className="addNote-input insert-link" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
-          <span onClick={this.addLink.bind(this)} id="addLink">+</span>
-          <span>({this.state.urls.length})</span>
-          <input className="addNote-input noBorder" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
-          <span onClick={this.addCloudinaryLink.bind(this)} id="addLink">+</span>
-          <span>({this.state.cloudinaryFiles.length})</span>
+          <input id="imageUrl" className="addNote-input insert-link inline eightyPercent" ref="imageURL" placeholder="Enter image URL here" autoComplete="off" />
+          <div className="inline">
+            <span onClick={this.addLink.bind(this)} id="addLink">+</span>
+            <span>({this.state.urls.length})</span>
+          </div>
+          <input className="addNote-input noBorder eightyPercent" type="file" ref="fileInput" onChange={this.readImage} id="fileInput" autoComplete="off"/>
+          <div class="inline">
+            <span onClick={this.addCloudinaryLink.bind(this)} id="addLink">+</span>
+            <span>({this.state.cloudinaryFiles.length})</span>
+          </div>
           <input className="addNote-input" placeholder="Subject Unit" type="text" ref="unit" autocomplete="off" />
           <br />
           <button ref="addNoteButton">Add Note</button>

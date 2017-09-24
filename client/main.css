@@ -109,6 +109,9 @@ a:hover, a:visited{
   .removeOnSmallDevice{
     display:none;
   }
+  input{
+    width: 100%;
+  }
 }
 .fullSize-container{
   height:70vh;
@@ -186,4 +189,11 @@ input{
 }
 .noBorder{
   border:none;
+}
+/*filter notes menu*/
+
+.filterOption{
+  margin-right: 20px;
+  color:red;
+  cursor: pointer;
 }
