@@ -65,11 +65,17 @@ class FilterNotesMenu extends React.Component{
   }
   render(){
     return (
-      <div>
-        <label htmlFor="email" className="filterOption" onClick={this.toggleEmail.bind(this)}><input type="radio" id="email"/>@</label>
-        <label htmlFor="heart" className="filterOption" onClick={this.toggleLikes.bind(this)}><input type="radio" id="heart"/>heart</label>
-        <label htmlFor="time" className="filterOption" onClick={this.toggleRecent.bind(this)}><input type="radio" id="time"/>time</label>
-        <label htmlFor="unit" className="filterOption" onClick={this.toggleUnit.bind(this)}><input type="radio" id="unit"/>unit</label>
+      <div className="filterMenu">
+        <span>Filter by: </span>
+        <input type="radio" id="email" name="filterOptions" />
+        <label htmlFor="email" className="filterOption" onClick={this.toggleEmail.bind(this)}>@</label>
+        <input type="radio" id="heart" name="filterOptions" />
+        <label htmlFor="heart" className="filterOption" onClick={this.toggleLikes.bind(this)}>heart</label>
+        <input type="radio" id="time" name="filterOptions" />
+        <label htmlFor="time" className="filterOption" onClick={this.toggleRecent.bind(this)}>time</label>
+        <input type="radio" id="unit" name="filterOptions" />
+        <label htmlFor="unit" className="filterOption" onClick={this.toggleUnit.bind(this)}>unit</label>
+
         <br />
         <input ref="email" className="invisible" placeholder="Search Email" type="text" onChange={this.filterByEmail.bind(this)} />
         <input ref="unit" className="" placeholder="Search Unit" type="text" onChange={this.filterByUnit.bind(this)} />

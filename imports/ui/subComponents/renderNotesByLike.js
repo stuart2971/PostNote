@@ -31,14 +31,16 @@ import { Notes } from "./../../methods/methods";
   componentDidMount() {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({subject: this.props.subject}, {sort: {likes: -1}}).fetch();
+      let notes = Notes.find({subject: this.props.subject}).fetch();
+      notes = _.sortBy(notes,(n) => { return n.likes.length});
       this.setState({ notes })
     });
   }
   componentWillReceiveProps(nextProps) {
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
-      const notes = Notes.find({subject: nextProps.subject}, {sort: {likes: -1}}).fetch();
+      let notes = Notes.find({subject: nextProps.subject}).fetch();
+      notes = _.sortBy(notes,(n) => { return n.likes.length});
       this.setState({ notes });
     });
   }
