@@ -32,7 +32,7 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       let notes = Notes.find({subject: this.props.subject}).fetch();
-      notes = _.sortBy(notes,(n) => { return n.likes.length});
+      notes = _.sortBy(notes,(n) => { return -n.likes.length});
       this.setState({ notes })
     });
   }
@@ -40,7 +40,7 @@ import { Notes } from "./../../methods/methods";
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes');
       let notes = Notes.find({subject: nextProps.subject}).fetch();
-      notes = _.sortBy(notes,(n) => { return n.likes.length});
+      notes = _.sortBy(notes,(n) => { return -n.likes.length});
       this.setState({ notes });
     });
   }

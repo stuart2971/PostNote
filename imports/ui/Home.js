@@ -20,7 +20,7 @@ export default class Home extends React.Component{
     this.tracker = Tracker.autorun(() => {
       Meteor.subscribe('notes-newest')
       const notes = Notes.find({},{sort: {createdAt: -1}, limit: 10}).fetch();
-      console.log(notes)
+      console.log(notes);
       this.setState({ notes });
     })
   }
@@ -50,8 +50,6 @@ export default class Home extends React.Component{
         <Menu />
         <h1>★ Newest Notes ★</h1>
         {this.renderNewNotes(this.state.notes)}
-        <br />
-        <Link to="/searchNotes">Find more Notes ➜ </Link>
       </div>
     )
   }

@@ -2,7 +2,8 @@ import { Meteor } from "meteor/meteor"
 import React from "react";
 import { withRouter, Link, Redirect } from "react-router-dom";
 import SimpleSchema from "simpl-schema";
-import axios from "axios"
+import axios from "axios";
+import cloudinary from "cloudinary"
 
 import { SubjectRoutes } from "./subjectRoutes/subjectRoutes";
 import "../methods/methods";
@@ -38,14 +39,12 @@ class AddNote extends React.Component{
     let createdAt = Date.parse(new Date());
     let unit = this.refs.unit.value;
     let file = this.refs.fileInput.files[0];
-
-    if(!Meteor.userId()){
-      this.setState({
-        message: "You need to login before you can add a note",
-        loginMessage: <Link to="/login">Login</Link>
-      })
-      throw new Meteor.Error(400, "User is not signed in.")
-    }
+    console.log(this.refs.fileInput.files[0])
+    const inputFieldLimits = new SimpleSchema({
+      title: {max: 50, type: String},
+      description: {max: 400, type: String},
+      unit: {max: 20, type: String}
+    }).validate({ title, description, unit })
 
     if(title && subject && unit){
       if(imageURL.length == 0 && file == undefined){
@@ -166,7 +165,6 @@ class AddNote extends React.Component{
     }).catch(function(err){
       console.log(err);
     })
-    console.log(file);
   }
   checkIfError(){
     if(this.state.message){

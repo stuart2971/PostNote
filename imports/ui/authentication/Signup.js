@@ -1,7 +1,8 @@
 import { Meteor } from "meteor/meteor"
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
-import { Accounts } from "meteor/accounts-base"
+import { Accounts } from "meteor/accounts-base";
+import SimpleSchema from "simpl-schema";
 
 import "../../../client/stylesheets/authentication.css"
 
@@ -22,6 +23,17 @@ class Signup extends React.Component{
     let email = this.refs.email.value;
     let password = this.refs.password.value;
 
+    let accountValidation = new SimpleSchema({
+      password: {
+        type: String,
+        label: "Password",
+        max: 50,
+      },
+      email: {
+        type: SimpleSchema.RegEx.Email
+      }
+    }).validate({ password, email });
+    
     Accounts.createUser({ email, password }, (err) => {
       if(err){
         this.setState({ message: err.reason })

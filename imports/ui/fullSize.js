@@ -79,6 +79,7 @@ export default class fullSize extends React.Component{
       return;
     }
     return images.map((image) => {
+      // cloudinary.image(this.state.doc.cloudinaryData.data.public_id, {quality: 80})
       return <img src={image} onClick={() => {
         window.location.href = image || doc.cloudinaryData.data.secure_url
       }}/>
