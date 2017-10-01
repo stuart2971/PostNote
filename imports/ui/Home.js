@@ -31,15 +31,15 @@ export default class Home extends React.Component{
     return notes.map((note) => {
       return(
         <div key={note._id} className="note-list" onClick={() => {this.props.history.push(`/fullSize/${note._id}`)}}>
-          <div className="left inline">
-            <p><strong>{note.title}</strong></p>
-            <span className="removeOnSmallDevice">{note.userEmail}</span>
+          <div className="overlay center-v-outer">
+            <div className="transparent center-v-inner">
+              <p>⬆ {note.likes.length} ⬇ {note.dislikes.length}</p>
+              <p>{note.unit}</p>
+            </div>
           </div>
-          <div className="right inline">
-            <span>Subject: <strong>{note.subject}, {note.unit}</strong></span>
-            <br />
-            <span className="removeOnSmallDevice">⬆ {note.likes.length} ⬇ {note.dislikes.length}</span>
-          </div>
+          <img src={note.imageURL[0]} className="note_display" />
+          <p>{note.subject}</p>
+          <p>{note.userEmail}</p>
         </div>
       )
     })

@@ -7,25 +7,25 @@
   top:0px;
   z-index: 10;
   border-bottom: 0.4px solid #C0C5CD;
-  transition: 0.28s ease-in-out;
-}
-.menu:hover > .menu-item{
-  opacity:1;
-  height: 5.5vh;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
 }
 .menu-item{
-  font-size:1.6em;
+  font-size:0em;
   color:black;
   margin-top: 1.2vh;
   display:block;
   opacity:0;
-  height: 0vh;
-  transition: 0.28s ease-in-out;
+  height: 0px;
+  transition: 0.3s ease-in-out;
   border-bottom: 0.7px solid #C0C5CD;
+  z-index: 100;
 }
 .menu-item-extend{
   opacity:1;
-  height: 6vh;
+  height: 5.5vh;
+  z-index: 100;
+  font-size: 1.6em;
 }
 .noStyle{
   border: none;

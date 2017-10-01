@@ -41,18 +41,46 @@ body{
 }
 .note-list{
   background:#F1F1F1;
-  min-width:70%;
+  width:30%;
   position: relative;
   display:inline-block;
-  min-height:60px;
+  height:25vh;
   margin-top: 5px;
   cursor: pointer;
   transition: 0.2s ease-in-out;
   border-radius: 5px;
+  margin: 5px;
+  text-align: left;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
 }
-.note-list:hover{
-  transform:scale(1.03);
-  box-shadow: 3px 3px 8px #9A9B94;
+.note_display{
+  width: 100%;
+  height: 20vh;
+  top:0px;
+  left:0px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.overlay{
+  position: absolute;
+  width:100%;
+  height:20vh;
+  transition: 0.3s ease;
+  text-align: center;
+}
+.overlay:hover{
+  background:black;
+  opacity: 0.8;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.transparent{opacity: 0;}
+.overlay:hover > .transparent{
+  opacity: 1;
+  color:white;
+  z-index: 12;
+  font-size: 1.6em;
 }
 .left{
   text-align: left;
@@ -84,6 +112,27 @@ a{
 a:hover, a:visited{
   text-decoration: none;
   color:black;
+}
+@media only screen and (max-width: 1000px) {
+  .note-list{
+    display:block;
+    width: 100%;
+    height:35vh;
+    font-size: 1.2em;
+  }
+  .note_display{
+    width: 100%;
+    height: 30vh;
+  }
+  .overlay{
+    z-index: 12;position: absolute;
+    width:100%;
+    height:30vh;
+    transition: 0.3s ease;
+  }
+  .overlay > p {
+    font-size: 1.8em;
+  }
 }
 @media only screen and (max-width: 800px) {
   .menu {

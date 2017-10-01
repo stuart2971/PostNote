@@ -41,7 +41,7 @@ class AddNote extends React.Component{
     let file = this.refs.fileInput.files[0];
     console.log(this.refs.fileInput.files[0])
     const inputFieldLimits = new SimpleSchema({
-      title: {max: 50, type: String},
+      title: {max: 20, type: String},
       description: {max: 400, type: String},
       unit: {max: 20, type: String}
     }).validate({ title, description, unit })

@@ -17,7 +17,7 @@ class Notes extends React.Component{
   }
   checkIfSubject(){
     if(SubjectRoutes.includes(this.props.match.params.subject)){
-      return <h1>Here are all the {this.props.match.params.subject} notes.</h1>
+      return <h1>{this.props.match.params.subject}.</h1>
     }else{
       return <h2>Subject not found...:(</h2>
     }

@@ -57,9 +57,10 @@ class userProfile extends React.Component{
       <div className="container-profile">
         <div className="center">
           <Menu />
+          <h1 className="header-profile">{this.state.email}</h1>
+          <button className="logout-button" onClick={this.logoutUser.bind(this)}>Logout</button>
         </div>
-        <h1 className="header-profile">{this.state.email}</h1>
-        <button className="logout-button" onClick={this.logoutUser.bind(this)}>Logout</button>
+
         <RenderNotesByUserId filter={this.props.match.params.userId}/>
       </div>
     )
