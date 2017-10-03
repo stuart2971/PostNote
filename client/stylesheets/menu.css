@@ -1,5 +1,5 @@
 .menu{
-  background: white;
+  background:white;
   width:100%;
   min-height:10vh;
   position: fixed;
@@ -19,12 +19,11 @@
   height: 0px;
   transition: 0.3s ease-in-out;
   border-bottom: 0.7px solid #C0C5CD;
-  z-index: 100;
+  display: block;
 }
 .menu-item-extend{
   opacity:1;
   height: 5.5vh;
-  z-index: 100;
   font-size: 1.6em;
 }
 .noStyle{
