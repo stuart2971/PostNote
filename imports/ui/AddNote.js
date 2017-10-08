@@ -39,11 +39,11 @@ class AddNote extends React.Component{
     let createdAt = Date.parse(new Date());
     let unit = this.refs.unit.value;
     let file = this.refs.fileInput.files[0];
-    console.log(this.refs.fileInput.files[0])
+
     const inputFieldLimits = new SimpleSchema({
-      title: {max: 20, type: String},
+      title: {max: 69, type: String},
       description: {max: 400, type: String},
-      unit: {max: 20, type: String}
+      unit: {max: 69, type: String}
     }).validate({ title, description, unit })
 
     if(title && subject && unit){
@@ -104,6 +104,8 @@ class AddNote extends React.Component{
           })
         });
       }
+    }else{
+      this.setState({message: "Make sure you have a title, unit, and subject filled out.  "})
     }
   }
   addLink(){

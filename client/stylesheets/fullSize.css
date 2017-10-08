@@ -11,3 +11,14 @@
 #delete_button:hover{
   background: #AC0C0C;
 }
+.fullSize-image{
+  width: 70%;
+  height:40%;
+  display:inline-block;
+  margin-bottom: 5px;
+}
+.imageContainer{
+  width:100%;
+  min-height:100vh;
+  padding:10px;
+}

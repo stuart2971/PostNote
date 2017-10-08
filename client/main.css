@@ -56,7 +56,7 @@ body{
 }
 .note_display{
   width: 100%;
-  height: 20vh;
+  height: 80%;
   top:0px;
   left:0px;
   border-top-right-radius: 5px;
@@ -86,7 +86,7 @@ body{
   text-align: left;
   padding-left:1.5%;
   padding-top:0.5%;
-  min-width:50%;
+  max-width:50%;
   min-height:100%;
   display:inline-block;
   /*background: red;*/
@@ -162,16 +162,6 @@ a:hover, a:visited{
     width: 100%;
   }
 }
-.fullSize-container{
-  height:70vh;
-  width:100%;
-  margin-top:15vh;
-}
-.fullSize-image{
-  display:inline-block;
-  width:100%;
-  height:100%;
-}
 img{
   cursor:pointer;
 }
@@ -239,4 +229,5 @@ input{
 .noBorder{
   border:none;
 }
-/*filter notes menu*/
+.titleBar{border-bottom:0.5px solid #C0C5CD; width: 100%; height: 10vh;}
+.title{font-size: 2.5em;}

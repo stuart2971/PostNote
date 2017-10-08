@@ -80,7 +80,7 @@ export default class fullSize extends React.Component{
     }
     return images.map((image) => {
       // cloudinary.image(this.state.doc.cloudinaryData.data.public_id, {quality: 80})
-      return <img src={image} onClick={() => {
+      return <img className="fullSize-image " src={image} onClick={() => {
         window.location.href = image || doc.cloudinaryData.data.secure_url
       }}/>
     })
@@ -89,10 +89,28 @@ export default class fullSize extends React.Component{
     if(!Meteor.userId()){
       return <Redirect to="/login" />
     }
-    return(
-      <div className="fullSize-container">
-        <div className="left">
-          {this.renderImages(doc)}
+    return (
+      <div>
+        <div className="titleBar">
+          <div className="left">
+            <Link to={`/users/${doc.userId}`} className="inline title">{doc.userEmail}</Link>
+          </div>
+          <div className="right">
+          <button id="delete_button" onClick={(e) => {
+                e.preventDefault();
+                if(doc.cloudinaryData != null){
+                  Meteor.call("cloudinary.remove", doc.cloudinaryData.data.public_id)
+                }
+                Meteor.call("notes.remove", doc._id, (err, res) => {
+                  if(!err){this.props.history.push("/");}
+                });
+              }}>Delete</button>
+          </div>
+          </div>
+          <p>*You can click on an image to make it bigger*</p>
+          <div className="imageContainer">
+            {this.renderImages(doc)}
+          </div>
           <p className="center react-data">
             <button id="like" className="react" onClick={() => {
               Meteor.call("like", doc._id, Meteor.user().emails[0].address);
@@ -102,27 +120,7 @@ export default class fullSize extends React.Component{
               Meteor.call("dislike", doc._id, Meteor.user().emails[0].address);
             }}>⬇</button>
             {this.state.dislikes}
-          </p>
-        </div>
-        <div className="right">
-          <div className="hover-delete">
-            <span>{doc.title}</span>
-          </div>
-          <br />
-          <Link to={`/users/${doc.userId}`}>{doc.userEmail}</Link>
-          <br />
-          <span className="description">{doc.description}</span>
-          <br />
-          <button id="delete_button" onClick={(e) => {
-            e.preventDefault();
-            if(doc.cloudinaryData != null){
-              Meteor.call("cloudinary.remove", doc.cloudinaryData.data.public_id)
-            }
-            Meteor.call("notes.remove", doc._id, (err, res) => {
-              if(!err){this.props.history.push("/");}
-            });
-          }}>Delete</button>
-        </div>
+        </p>
       </div>
     )
   }
